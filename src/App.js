@@ -1,23 +1,43 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import axios from 'axios';
 
 function App() {
+  const URL = ''
+  const [eur, setEur] = useState(0);
+  const [sek, setSek] = useState(0);
+  const [rate, setRate] = useState(0);
+
+  const convert = (e) => {
+
+    e.preventDefault()
+    axios.get(URL)
+      .then((response) => {
+        const json = response.data
+        setRate(json.data.SEK);
+        setSek(eur * json.data.SEK);
+      }).catch(error => {
+        alert(error)
+      })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="container">
+      <h3> EURSEK exchage </h3>
+      <form onSubmit={convert}>
+        <div>
+          <label>EUR</label>
+          <input type="number" step="0.01" value={eur} onChange={e => setEur(e.target.value)} />
+          <uotput>{rate}</uotput>
+        </div>
+        <div>
+          <label>SEK</label>
+          <output>{sek.toFixed(2)}</output>
+        </div>
+        <div>
+          <button>Calculator</button>
+        </div>
+      </form >
     </div>
   );
 }
